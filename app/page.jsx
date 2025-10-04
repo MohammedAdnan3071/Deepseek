@@ -1,6 +1,8 @@
 'use client';
 
 import { assets } from "@/assets/assets";
+import PromptBox from "@/components/PromptBox";
+import Sidebar from "@/components/Sidebar";
 import Image from "next/image";
 
 import { useState } from "react";
@@ -13,7 +15,7 @@ export default function Home() {
   return (
       <div>
           <div className="flex h-screen">
-              {/* side bar */}
+            <Sidebar expand={expand} setExpand={setExpand}/>
               <div className="flex-1  flex flex-col items-center justify-center px-4 pb-10  bg-[#292a2d] text-white relative">
                 <div className="md:hidden absolute px-4 top-6 flex items-center justify-between w-full">
                   <Image onClick={()=>(expand ? setExpand(flase) : setExpand(true))}
@@ -33,6 +35,7 @@ export default function Home() {
               (<div></div>)
             }
             {/* prompt box  */}
+            <PromptBox isLoading={isLoading} setIsLoading={setIsLoading} /> 
             <p className="text-xs absolute bottom-10 text-white-500">AI generated Content, for reference only.</p>
               </div>
           </div>
