@@ -48,32 +48,74 @@ export async function POST(req){
     };
     await connectDB();
 
-     switch(type) {
-        case 'user.created':
-               await User.create(UserData)
-            break;
+    //  switch(type) {
+    //     case 'user.created':
+    //            await User.create(UserData)
+    //         break;
 
-        case 'user.updated':
-               await User.findByIdAndUpdate(data.id ,UserData)
-            break;
+    //     case 'user.updated':
+    //            await User.findByIdAndUpdate(data.id ,UserData)
+    //         break;
 
-        case 'user.deleted':
-               await User.findByIdAndDelete(data.id)
-            break;
-        default :
-            break;
-     }
+    //     case 'user.deleted':
+    //            await User.findByIdAndDelete(data.id)
+    //         break;
+    //     default :
+    //         break;
+    //  }
 
-     // the above code :
-    // depending on the type of webhook event:
-        // user.created -> add a new user
-        // user.updated -> update existing user data.
-        // user.deleted -> remove the user from the db
+    //  // the above code :
+    // // depending on the type of webhook event:
+    //     // user.created -> add a new user
+    //     // user.updated -> update existing user data.
+    //     // user.deleted -> remove the user from the db
 
-     return NextResponse.json({message:"Event Received "});
+    //  return NextResponse.json({message:"Event Received "});
 
-     // sends a simple JSON response confirming that your sever received the webhook successfully
-}
+    //  // sends a simple JSON response confirming that your sever received the webhook successfully
+
+
+    switch (type) {
+            case "user.created":
+                try {
+                    // Use upsert to avoid duplicate key errors
+                    await User.findByIdAndUpdate(
+                        data.id,
+                        UserData,
+                        { upsert: true, new: true, setDefaultsOnInsert: true }
+                    );
+                } catch (err) {
+                    console.error("Error creating user:", err);
+                }
+                break;
+
+            case "user.updated":
+                try {
+                    await User.findByIdAndUpdate(data.id, UserData, { new: true });
+                } catch (err) {
+                    console.error("Error updating user:", err);
+                }
+                break;
+
+            case "user.deleted":
+                try {
+                    await User.findByIdAndDelete(data.id);
+                } catch (err) {
+                    console.error("Error deleting user:", err);
+                }
+                break;
+
+            default:
+                console.warn("Unhandled webhook event type:", type);
+                break;
+        }
+
+        return NextResponse.json({ message: "Event Received" });
+    } catch (error) {
+        console.error("Unexpected error in webhook handler:", error);
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
+
 
 
 // TL ;DR
