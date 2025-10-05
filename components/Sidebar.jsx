@@ -1,11 +1,15 @@
 
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import { assets } from '@/assets/assets'
 import { useClerk , UserButton} from '@clerk/nextjs'
+import { useAppContext } from '@/context/AppContext'
+import ChatLabel from './ChatLabel'
 
 const Sidebar = ({ expand, setExpand }) => {
     const {openSignIn} = useClerk();
+    const {user} = useAppContext();
+    const {openMenu, setOpenMenu} = useState({id:0 , open:false})
     
   return (
     <div
@@ -75,6 +79,7 @@ const Sidebar = ({ expand, setExpand }) => {
         {/* Recent Chats */}
         <div className={`mt-8 text-white/75 text-sm ${expand ? 'block' : 'hidden'}`}>
           <p className='my-1'>Recent Chats</p>
+            <ChatLabel openMenu={openMenu} setOpenMenu={setOpenMenu}/>
           {/* Chat labels go here */}
         </div>
       </div>
@@ -121,12 +126,13 @@ const Sidebar = ({ expand, setExpand }) => {
         </div>
 
         {/* My Profile (separate container) */}
-        <div onClick={openSignIn}
+        <div onClick={ user ? null : openSignIn}
           className={`flex items-center ${
             expand ? 'hover:bg-white/10 rounded-lg p-2.5' : 'justify-center w-full'
           } gap-3 text-white/60 text-sm mt-2 cursor-pointer`}
         >
-          <Image src={assets.profile_icon} alt='' className='w-7' />
+          {user ? <UserButton /> : <Image src={assets.profile_icon} alt='' className='w-7' /> }
+          
           {expand && <span>My Profile</span>}
         </div>
       </div>

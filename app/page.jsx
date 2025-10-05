@@ -4,7 +4,7 @@ import { assets } from "@/assets/assets";
 import PromptBox from "@/components/PromptBox";
 import Sidebar from "@/components/Sidebar";
 import Image from "next/image";
-
+import Message from "@/components/Message";
 import { useState } from "react";
 
 export default function Home() {
@@ -32,7 +32,7 @@ export default function Home() {
                    <p className="text-sm mt-2">How can I help you today?</p>
                   </>
                 ) :
-              (<div></div>)
+              (<div><Message role='user' content='What is Next js?'/></div>)
             }
             {/* prompt box  */}
             <PromptBox isLoading={isLoading} setIsLoading={setIsLoading} /> 
