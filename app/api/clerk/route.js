@@ -18,7 +18,9 @@ export async function POST(){
     const headerPayload = await headers()
     const svixHeaders  = {
         "svix-id" : headerPayload.get("svix-id"),
+        "svix-timestamp" : headerPayload.get("svix-timestamp"),
         "svix-signature" : headerPayload.get("svix-signature"),
+
     };
  // the above code :
     // creates a new webhook instance using the secert key 
