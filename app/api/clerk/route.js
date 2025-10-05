@@ -13,7 +13,7 @@ import { jsx } from "react/jsx-runtime";
 
 
 // This runs whenever the server receives a POST request - which is how webhooks ar usually sent.
-export async function POST(){
+export async function POST(req){
     const wh = new Webhook(process.env.SIGNING_SECRET);
     const headerPayload = await headers()
     const svixHeaders  = {
@@ -69,7 +69,9 @@ export async function POST(){
         // user.created -> add a new user
         // user.updated -> update existing user data.
         // user.deleted -> remove the user from the db
-     return NextResponse.json({message:"Event Received "})
+
+     return NextResponse.json({message:"Event Received "});
+
      // sends a simple JSON response confirming that your sever received the webhook successfully
 }
 
